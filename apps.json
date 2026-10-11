@@ -1,0 +1,11 @@
+[
+  {"repo": "DeskClock",       "package": "com.android.deskclock",  "dir": "LineageClock",      "apk": "build/outputs/apk/release/DeskClock-release-unsigned.apk"},
+  {"repo": "ExactCalculator", "package": "com.android.calculator2", "dir": "LineageCalculator", "apk": "build/outputs/apk/release/ExactCalculator-release-unsigned.apk"},
+  {"repo": "Recorder",        "package": "org.lineageos.recorder", "dir": "LineageRecorder",   "apk": "app/build/outputs/apk/release/app-release-unsigned.apk"},
+  {"repo": "Glimpse",         "package": "org.lineageos.glimpse",  "dir": "LineageGlimpse",    "apk": "app/build/outputs/apk/release/app-release-unsigned.apk"},
+  {"repo": "Etar",            "package": "ws.xsoh.etar",           "dir": "LineageCalendar",   "apk": "app/build/outputs/apk/release/app-release-unsigned.apk",
+   "files": {"app/src/main/res/resources.properties": "unqualifiedResLocale=en-US\n"},
+   "replace": [["app/src/main/AndroidManifest.xml", " package=\"org.lineageos.etar\"", ""]]},
+  {"repo": "Jelly",           "package": "org.lineageos.jelly",    "dir": "LineageBrowser",    "apk": "app/build/outputs/apk/release/app-release-unsigned.apk"},
+  {"repo": "Eleven",          "package": "org.lineageos.eleven",   "dir": "LineageMusic",      "apk": "build/outputs/apk/release/Eleven-release-unsigned.apk"}
+]

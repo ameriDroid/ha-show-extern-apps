@@ -1,0 +1,87 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        app: [DeskClock, ExactCalculator, Recorder, Glimpse, Etar, Jelly, Eleven]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: zulu
+          java-version: 17
+          cache: gradle
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install platforms and build-tools
+        run: sdkmanager "platforms;android-34" "platforms;android-35" "build-tools;34.0.0"
+
+      - name: Build ${{ matrix.app }}
+        run: python3 tools/build.py ${{ matrix.app }}
+
+      # Repository secrets are not available to pull requests from forks: then nothing is signed and the APK stays unsigned.
+      - name: Sign ${{ matrix.app }}
+        env:
+          EXTERN_KEYSTORE_B64: ${{ secrets.EXTERN_KEYSTORE_B64 }}
+          EXTERN_KEYSTORE_PASSWORD: ${{ secrets.EXTERN_KEYSTORE_PASSWORD }}
+        run: python3 tools/sign.py ${{ matrix.app }}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.app }}
+          path: out/*.apk
+          if-no-files-found: error
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ${{ matrix.app }}-signed
+          path: out/signed/*.apk
+          if-no-files-found: ignore
+
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    environment: release            # add required reviewers to this environment to gate publishing
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: '*-signed'
+          path: out/signed
+          merge-multiple: true
+
+      - name: Manifest
+        run: python3 tools/manifest.py
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            out/signed/*.apk
+            out/manifest.json

@@ -1,0 +1,28 @@
+[submodule "apps/DeskClock"]
+	path = apps/DeskClock
+	url = https://github.com/LineageOS/android_packages_apps_DeskClock.git
+	branch = lineage-21.0
+[submodule "apps/ExactCalculator"]
+	path = apps/ExactCalculator
+	url = https://github.com/LineageOS/android_packages_apps_ExactCalculator.git
+	branch = lineage-21.0
+[submodule "apps/Recorder"]
+	path = apps/Recorder
+	url = https://github.com/LineageOS/android_packages_apps_Recorder.git
+	branch = lineage-21.0
+[submodule "apps/Glimpse"]
+	path = apps/Glimpse
+	url = https://github.com/LineageOS/android_packages_apps_Glimpse.git
+	branch = lineage-21.0
+[submodule "apps/Etar"]
+	path = apps/Etar
+	url = https://github.com/LineageOS/android_packages_apps_Etar.git
+	branch = lineage-21.0
+[submodule "apps/Jelly"]
+	path = apps/Jelly
+	url = https://github.com/LineageOS/android_packages_apps_Jelly.git
+	branch = lineage-21.0
+[submodule "apps/Eleven"]
+	path = apps/Eleven
+	url = https://github.com/LineageOS/android_packages_apps_Eleven.git
+	branch = lineage-21.0
