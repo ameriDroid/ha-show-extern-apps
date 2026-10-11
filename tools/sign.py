@@ -28,8 +28,11 @@ def main():
         for a in APPS:
             if a["repo"] not in want: continue
             src = ROOT / "out" / f"{a['package']}-unsigned.apk"
+            if not src.exists():
+                sys.exit(f"{src.name} is missing: build {a['repo']} first")
             dst = ROOT / "out" / "signed" / f"{a['package']}.apk"
-            subprocess.run([apksigner, "sign", "--ks", ks, "--ks-pass", f"pass:{pw}", "--out", str(dst), str(src)], check=True)
+            subprocess.run([apksigner, "sign", "--ks", ks, "--ks-pass", "env:EXTERN_KS_PASS", "--out", str(dst), str(src)], check=True,
+                           env={**os.environ, "EXTERN_KS_PASS": pw})        # env, not argv: failures print the command
             subprocess.run([apksigner, "verify", str(dst)], check=True)
             print(f"signed {a['package']}")
     finally:
